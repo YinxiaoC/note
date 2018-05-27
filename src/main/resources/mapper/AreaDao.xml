@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yin.note.dao.AreaDao">
+    <!--实现方法-->
+    <!--sql语句-->
+    <select id="queryArea" resultType="com.yin.note.entity.Area">
+    SELECT area_id, area_name,
+    priority, create_time, last_edit_time
+    from area_note
+    order by priority
+    desc
+    </select>
+    <select id="queryAreaById" resultType="com.yin.note.entity.Area">
+        update area_note
+        <set>
+            <if test="areaName != null">area_name=#{areaName},</if>
+            <if test="priority != null">priority=#{priority},</if>
+            <if test="lastEditTime != null">last_edit_time=#{lastEditTime}</if>
+        </set>
+        where area_id=#{areaId}
+    </select>
+    <!--#{areaId}获取传入的参数-->
+
+    <!--useGeneratedKeys返回主键的值
+    useGeneratedKeys 设置为"true"表明要 MyBatis 获取由数据库自动生成的主键；
+    keyProperty="id"指定把获取到的主键值注入到 area（实体类） 的 id 属性-->
+    <insert id="insertArea" useGeneratedKeys="true" keyProperty="areaId"
+    keyColumn="area_id" parameterType="com.yin.note.entity.Area">
+    insert into
+    area_note(area_name,priority,
+    create_time,last_edit_time)
+    values
+    (#{areaName},#{priority},#{createTime},#{lastEditTime})
+    </insert>
+
+    <!--<set>标签里面是判断-->
+    <!--Mybatis的<set>标签 要使用逗号-->
+    <update id="updataArea" parameterType="com.yin.note.entity.Area">
+        update area_note
+        <set>
+            <if test="areaName!=null">area_name=#{areaName},</if>
+            <if test="priority!=null">priority=#{priority},</if>
+            <if test="lastEditTime!=null">last_edit_time=#{lastEditTime},</if>
+        </set>
+        where
+        area_id = #{areaId}
+    </update>
+
+    <delete id="delete">
+        delete from
+        area_note
+        where
+        area_id = #{areaId}
+    </delete>
+</mapper>
